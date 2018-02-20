@@ -24,17 +24,17 @@ from the root directory.
 You can see what urls are available using curl:
 
 ```sh
-$ curl localhost:8080
+$ curl localhost:9090
 ```
 
 You can view existing people objects using a similar request:
 
 ```sh
-$ curl localhost:8080/persons
+$ curl localhost:9090/users
 ```
 
 and can create new ones using a POST:
 
 ```sh
-$ curl -X POST -H "Content-Type:application/json" -d '{ "firstName" : "Karl", "lastName" : "Penzhorn" }' localhost:8080/persons
+$ curl -X POST -H "Content-Type:application/json" -d '{ "userId" : "user1", "email" : "user1@acme.com" }' localhost:9090/users
 ```
