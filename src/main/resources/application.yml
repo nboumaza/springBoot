@@ -1,0 +1,38 @@
+#server
+server:
+  port: ${PORT:9090}
+
+# spring
+spring:
+  application:
+    name: zazie
+
+  # datasource
+
+  jpa:
+      database-platform: org.hibernate.dialect.HSQLDialect
+      hibernate:
+        ddl-auto: update
+      properties:
+        hibernate:
+          show_sql: true
+          use_sql_comments: true
+          format_sql: true
+
+#endpoints
+endpoints:
+  health:
+    sensitive: false
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+
+
+  hsql:
+    console:
+      enabled: true
+      path: /console
+      settings:
+        trace: false
+        web-allow-others: false
