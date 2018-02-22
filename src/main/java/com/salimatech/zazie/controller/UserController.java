@@ -1,76 +1,91 @@
 package com.salimatech.zazie.controller;
 
 
-import com.salimatech.zazie.exceptions.UserNotFoundException;
+import com.salimatech.zazie.exceptions.DataIntegrityException;
+import com.salimatech.zazie.exceptions.EntityNotFoundException;
 import com.salimatech.zazie.model.User;
 import com.salimatech.zazie.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *   User Account REST controller
+ *   Please refer to the following swagger api for more detail on the available
+ *   operations and corresponding response status
+ *   https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
+ */
 @RestController
 public class UserController {
+
+    private static Logger logger = LogManager.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;
 
 
+    /**
+     * @return list of all user accounts
+     */
     @GetMapping("/users")
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    /*
-      User save(User user);
-        List<User> getAllUsers();
-        User deleteUser(User user);
-        User findByUserId(String userId);
+
+    /**
+     * @param userId userId of the account to search for
+     * @return user account if such accounts exists
+     * @throws EntityNotFoundException if no such account exists
      */
-
-
     @GetMapping("/users/{userId}")
-    public User findByUserId(@RequestParam(value="userId") String userId) {
+    public User findByUserId(@PathVariable("userId") String userId)  throws EntityNotFoundException {
 
        Optional<User> user = userRepository.findByUserId(userId);
 
-        if (!user.isPresent())
-            throw new UserNotFoundException(userId);
+        if (!user.isPresent()) {
+            String message = "could not find a user account with userId = "+userId;
+            logger.debug(message);
+            throw new EntityNotFoundException(message);
+        }
         return user.get();
     }
 
 
     @DeleteMapping("/users/{userId}")
-    public void deleteUser(@PathVariable String userId) {
-        userRepository.deleteByUserId(userId);
-    }
+    public ResponseEntity<Void> deleteByUserId(@PathVariable("userId") String userId) {
 
+        userRepository.deleteByUserId(userId);
+
+        //audit and authorization @Advice could be used here
+        logger.debug("deleted user with userId ="+userId);
+
+        return ResponseEntity.noContent().build();
+
+    }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> add(@RequestBody User user) {
+    public User save(@RequestBody User user) {
 
+        User savedUser;
 
-        User savedUser = userRepository.save(user);
+        try {
+            savedUser = userRepository.save(user);
+        }
+        catch (DataIntegrityViolationException e){
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(savedUser.getId()).toUri();
+            logger.error(e.getStackTrace());
+            throw new DataIntegrityException(e.getMessage());
+        }
 
-        return ResponseEntity.created(location).build();
+        return savedUser;
 
     }
 
-
-    /**
-     * validates that a user account to be created does not already exists
-     * @param userId
-     * @throws  UserNotFoundException
-     */
-    /*private void validateUser(String userId) {
-        this.userRepository.findByUserId(userId).orElseThrow(
-                () -> new UserNotFoundException(userId));
-    }*/
 }

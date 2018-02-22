@@ -4,24 +4,48 @@ Sample Spring Boot REST application using the following
 [Swagger API](https://virtserver.swaggerhub.com/nboumaza/springboot/1.0.0)
 
 
-### Requirements
+
+## Requirements
 
 - Maven
 - JDK 8
 
-### Running
+## Solution Overview
 
-To build and start the server simply type
+Note: Microservices ....
+
+## Swagger REST API Documentation
+
+
+
+## Build Tool
+This project uses maven as the build and packaging tool
+
+### Compiling
+```sh
+mvn install javadoc:javadoc 
+```
+## Testing
+
+## Generating Java Doc
+
+## Running
+
+To start the server simply type from the root directory
 
 ```sh
 $ mvn spring-boot:run
 ```
 
-from the root directory.
 
-### Using
 
 You can see what urls are available using curl:
+
+## Testing 
+
+### Postman
+
+### cCurl
 
 ```sh
 $ curl localhost:9090

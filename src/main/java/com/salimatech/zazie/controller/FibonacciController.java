@@ -1,11 +1,19 @@
 package com.salimatech.zazie.controller;
 
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.stream.IntStream;
 
+
+/**
+ *   Fibonacci REST controller
+ *   Please refer to the following swagger api for more detail on the available
+ *   operations and corresponding response status
+ *   https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
+ */
 @RestController
 public class FibonacciController {
 

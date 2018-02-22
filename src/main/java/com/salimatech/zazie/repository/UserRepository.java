@@ -3,25 +3,29 @@ package com.salimatech.zazie.repository;
 import com.salimatech.zazie.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/**
+ * User repository interface
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * find user by userId
-     * @param userId
+     * @param userId search value
      * @return user if found
+     * @throws com.salimatech.zazie.exceptions.EntityNotFoundException
      */
     Optional<User> findByUserId(String userId);
 
+
     /**
-     * delete user by userId
-     * @param userId
-     * @return
+     * @param userId userId of the account to delete
+     * @return the id of the deleted user account -
      */
-    User deleteByUserId(String userId);
-
-
+    @Transactional
+    long deleteByUserId(String userId);
 }

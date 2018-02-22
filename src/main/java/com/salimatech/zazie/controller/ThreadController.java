@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ThreadController {
 
-    @GetMapping("/deadlockStatus")
+    @GetMapping("/deadlockInfo")
     public  String retrieveDeadLockStatus() {
         return "";
     }

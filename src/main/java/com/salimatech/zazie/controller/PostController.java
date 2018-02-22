@@ -7,6 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *   Posts REST controller which itself is a client to a subset of the following
+ *   endpoint: https://jsonplaceholder.typicode.com
+ *
+ *   Please refer to the following swagger api for more detail on the available
+ *   operations and corresponding response status
+ *   https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
+ */
 public class PostController {
     @GetMapping("/posts")
     public List<Post> retrieveAllUsers() {

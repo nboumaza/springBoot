@@ -3,11 +3,14 @@ package com.salimatech.zazie.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * EntityNotFoundException exception
+ */
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class UserNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends RuntimeException {
 
-    public UserNotFoundException(String userId) {
+    public EntityNotFoundException(String message) {
 
-        super("could not find user '" + userId + "'.");
+        super(message );
     }
 }
