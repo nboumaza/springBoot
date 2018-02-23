@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WordCountControllerTest {
+public class UserControllerTest {
 
     @Before
     public void setUp() throws Exception {
@@ -15,6 +15,18 @@ public class WordCountControllerTest {
     }
 
     @Test
-    public void countWords() {
+    public void findAll() {
+    }
+
+    @Test
+    public void findByUserId() {
+    }
+
+    @Test
+    public void deleteByUserId() {
+    }
+
+    @Test
+    public void save() {
     }
 }

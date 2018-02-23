@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * find user by userId
      * @param userId search value
      * @return user if found
-     * @throws com.salimatech.zazie.exception.EntityNotFoundException
+     * @throws com.salimatech.zazie.exception.EntityNotFoundException if no such account exists
      */
     Optional<User> findByUserId(String userId);
 

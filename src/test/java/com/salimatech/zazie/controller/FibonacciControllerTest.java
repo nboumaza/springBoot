@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WordCountControllerTest {
+public class FibonacciControllerTest {
 
     @Before
     public void setUp() throws Exception {
@@ -15,6 +15,10 @@ public class WordCountControllerTest {
     }
 
     @Test
-    public void countWords() {
+    public void fibonaccRecursive() {
+    }
+
+    @Test
+    public void fibonacciIterative() {
     }
 }

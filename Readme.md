@@ -1,64 +1,51 @@
 # CRUD App with Spring Boot
 
-Sample Spring Boot REST application using the following
+Sample Spring Boot REST application which includes the following
+spring based implementation.
+
+## Swagger REST API Documentation
 [Swagger API](https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/)
 
 
-
 ## Requirements
-
 - Maven
 - JDK 8
-
-## Solution Overview
-
-Note: Microservices ....
-
-## Swagger REST API Documentation
-
-
 
 ## Build Tool
 This project uses maven as the build and packaging tool
 
-### Compiling
+### Building the artifact and java doc generation
 ```sh
 mvn install javadoc:javadoc 
 ```
-## Testing
-
-## Generating Java Doc
 
 ## Running
-
 To start the server simply type from the root directory
+spring boot application uses http://localhost:9090
 
 ```sh
-$ mvn spring-boot:run
+mvn spring-boot:run
 ```
-
-
-
-You can see what urls are available using curl:
 
 ## Testing 
 
 ### Postman
+A [Postman](https://www.getpostman.com/) collection is included under
+<projectRoot>/src/tes/resources folder.
+
 
 ### cURL
 
+Home controller command:
 ```sh
 $ curl localhost:9090
 ```
+Other commands
 
-You can view existing people objects using a similar request:
+Each cURL command can be easily generated via the included Postman
+collection 
 
-```sh
-$ curl localhost:9090/users
-```
+1. locate the right label titled:  "Generate Code"
+2. From the resulting pop up "Generate Code Snippet" window, locate on the
+   left side a combo box and choose cURL option.
 
-and can create new ones using a POST:
-
-```sh
-$ curl -X POST -H "Content-Type:application/json" -d '{ "userId" : "user1", "email" : "user1@acme.com" }' localhost:9090/users
-```
