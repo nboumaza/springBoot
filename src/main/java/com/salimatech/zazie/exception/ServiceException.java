@@ -1,4 +1,4 @@
-package com.salimatech.zazie.exceptions;
+package com.salimatech.zazie.exception;
 
 /**
  * The service was acting as a proxy and received

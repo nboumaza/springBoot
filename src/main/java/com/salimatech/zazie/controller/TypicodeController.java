@@ -1,6 +1,6 @@
 package com.salimatech.zazie.controller;
 
-import com.salimatech.zazie.exceptions.EntityNotFoundException;
+import com.salimatech.zazie.exception.ServiceException;
 import com.salimatech.zazie.model.json.Post;
 import com.salimatech.zazie.service.TypClientService;
 import org.apache.logging.log4j.LogManager;
@@ -37,7 +37,7 @@ public class TypicodeController {
      * @return list of all posts
      */
     @GetMapping("/posts")
-    public List<Post> fetchAllPosts() {
+    public List<Post> fetchAllPosts() throws ServiceException {
 
 
         CompletableFuture<ResponseEntity<List<Post>>> future = service.fetchAllPosts();
@@ -59,9 +59,10 @@ public class TypicodeController {
     /**
      * @param userId user id to fetch the posts for
      * @return list of all posts
+     * @throws ServiceException if an upstream exception is encountered
      */
     @GetMapping("/posts?userId={userId}")
-    public List<Post> fetchPostsByUserId(@RequestParam("userId") long userId) {
+    public List<Post> fetchPostsByUserId(@RequestParam("userId") long userId) throws ServiceException {
 
         CompletableFuture<ResponseEntity<List<Post>>> future = service.fetchPostsByUserId(userId);
 
@@ -70,10 +71,15 @@ public class TypicodeController {
         try {
             posts =  future.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            String message = "encountered an error while retrieving the list of post for  userId="+userId;
+            logger.error(e.getStackTrace());
+            throw new ServiceException(message);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            String message = "encountered an error while retrieving the list of post for  userId="+userId;
+            logger.error(e.getStackTrace());
+            throw new ServiceException(message);
         }
+
 
         return posts.getBody();
 
@@ -81,12 +87,13 @@ public class TypicodeController {
 
 
     /**
+     /**
      * @param id id of the post to fetch
      * @return post result
-     * @throws EntityNotFoundException if no post was found
+     * @throws ServiceException if an upstream exception is encountered
      */
     @GetMapping("/posts/{id}")
-    public Post findPostById(@PathVariable("id") String id)  throws EntityNotFoundException {
+    public Post findPostById(@PathVariable("id") String id)  throws ServiceException {
 
         CompletableFuture<Post> future = service.findPostById(id);
 
@@ -94,17 +101,16 @@ public class TypicodeController {
         Post post = null;
 
         try {
-            post =  future.get();
-            /* if (!post.isPresent()) {
-            String message = "could not find a post account with id = "+id;
-            logger.debug(message);
-            throw new EntityNotFoundException(message);
-        }
-        */
+            post = future.get();
+
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            String message = "encountered an error while retrieving list for post id ="+id;
+            logger.error(e.getStackTrace());
+            throw new ServiceException(message);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            String message = "encountered an error while retrieving the list for post id ="+id;
+            logger.error(e.getStackTrace());
+            throw new ServiceException(message);
         }
 
         return post;

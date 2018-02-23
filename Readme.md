@@ -1,7 +1,7 @@
 # CRUD App with Spring Boot
 
 Sample Spring Boot REST application using the following
-[Swagger API](https://virtserver.swaggerhub.com/nboumaza/springboot/1.0.0)
+[Swagger API](https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/)
 
 
 

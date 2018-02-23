@@ -50,3 +50,5 @@ Configutation:
           AppenderRef:
             - ref: File_Appender
               level: warn
+
+name="org.springframework.web.servlet.mvc" level="WARN"

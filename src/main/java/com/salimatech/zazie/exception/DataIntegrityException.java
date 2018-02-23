@@ -1,4 +1,4 @@
-package com.salimatech.zazie.exceptions;
+package com.salimatech.zazie.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

@@ -25,7 +25,7 @@ public class WordCountController {
 
     @PostMapping(value = "/countWords" , consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String,Long> countWords(@RequestBody String text) {
-        return process(text);
+        return compute(text);
 
     }
 
@@ -36,7 +36,7 @@ public class WordCountController {
      *          of the number of occurrences.
      *          Note: returned list is soted alphabetically
      */
-    private Map<String, Long> process(String para){
+    private Map<String, Long> compute(String para){
 
         Map<String, Long> wordCounts =Arrays.stream(para.trim().split("[ ,.!?\r\n]"))
                 .map(word -> word.replaceAll("[^a-zA-Z]", "").toLowerCase().trim())
