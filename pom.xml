@@ -28,7 +28,8 @@
 		<jackson.version>2.8.7</jackson.version>
 		<javax.inject.version>1</javax.inject.version>
 		<javadoc.version>3.0.0</javadoc.version>
-		<rest.assured.version>3.0.0</rest.assured.version>
+		<mockito.version>1.9.5</mockito.version>
+		<surefire.version>2.20.1</surefire.version>
 	</properties>
 
 	<!--
@@ -71,13 +72,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!--
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-        -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -97,9 +91,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>${rest.assured.version}</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -117,13 +111,12 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!--
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${surefire.version}}</version>
 				</plugin>
-				-->
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -134,13 +127,12 @@
 				<configuration>
 				</configuration>
 			</plugin>
-			<!--
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${surefire.version}</version>
 			</plugin>
-			-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

@@ -1,7 +1,6 @@
 #  Demo Spring Boot
 
-Sample Spring Boot REST application which includes the following
-spring based implementation.
+Sample springboot REST application 
 
 ## Swagger REST API Documentation
 [Swagger API](https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/)
@@ -21,7 +20,7 @@ mvn install javadoc:javadoc
 ### Java Doc
 
 after completing the above command the generated java doc will be under
-<<projectRoot>/target/site/apidocs/
+<projectRoot>/target/site/apidocs/
 
 
 ## Running
