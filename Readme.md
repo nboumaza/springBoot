@@ -1,4 +1,4 @@
-# CRUD App with Spring Boot
+#  Demo Spring Boot
 
 Sample Spring Boot REST application which includes the following
 spring based implementation.
