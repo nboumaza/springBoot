@@ -6,10 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.TimeoutException;
-
 /**
+ * Threads REST controller
  *
+ * 1. Simulates threads that become deadlocked with each other.
+ * 2. Provides a function to m detect the deadlock
+ *
+ * Please refer to the following swagger api for more detail on the available
+ * operations and corresponding response status
+ * https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
  */
 @RestController
 public class ThreadController {
@@ -18,29 +23,25 @@ public class ThreadController {
     private ThreadServiceImpl service;
 
     /**
+     * Iteration 1: log deadlock info
+     * Iteration 2: return json status
      * retrieve threads status
      */
     @GetMapping("/threads/status")
     public void retrieveDeadLockStatus() {
 
-        //TODO
+        service.findDeadlock();
     }
 
 
     /**
-     * setup up deadlock between thow threads
+     * setup up deadlock scenario between two threads
      *
-     * @throws TimeoutException timeout exception
      */
     @PostMapping("/threads/deadlock")
-    public void createdDeadLock() throws TimeoutException {
+    public void createdDeadLock()  {
 
-        try {
-            service.createDeadlock();
-        } catch (TimeoutException e) {
-            throw new TimeoutException();
-        }
-
+        service.createDeadlock();
 
     }
 
