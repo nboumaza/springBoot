@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-public class HelloController {
+public class HomeController {
 
     /**
      *   Greeter REST controller
@@ -13,7 +13,7 @@ public class HelloController {
      *   https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
      */
     @RequestMapping("/")
-    public String index() {
+    public String home() {
         return "Greetings from Spring Boot!";
     }
 

@@ -3,7 +3,7 @@ package com.salimatech.zazie.controller;
 
 import com.salimatech.zazie.exceptions.DataIntegrityException;
 import com.salimatech.zazie.exceptions.EntityNotFoundException;
-import com.salimatech.zazie.model.User;
+import com.salimatech.zazie.model.entity.User;
 import com.salimatech.zazie.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

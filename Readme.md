@@ -45,7 +45,7 @@ You can see what urls are available using curl:
 
 ### Postman
 
-### cCurl
+### cURL
 
 ```sh
 $ curl localhost:9090

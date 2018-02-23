@@ -1,29 +1,29 @@
-package com.salimatech.zazie.model;
+package com.salimatech.zazie.model.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Post {
 
-    private Long id;
-    private Long userId;
+    private long id;
+    private long userId;
     private String title;
     private String body;
 
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

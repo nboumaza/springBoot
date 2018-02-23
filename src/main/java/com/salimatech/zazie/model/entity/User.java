@@ -1,4 +1,4 @@
-package com.salimatech.zazie.model;
+package com.salimatech.zazie.model.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,9 +12,10 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 2353528370345499815L;
-    private Long id;
+    private long id;
     private String userId;
     private String email;
+
 
     public User() {
         super();
@@ -32,7 +33,7 @@ public class User implements Serializable {
      */
     @Id
     @GeneratedValue()
-    public Long getId() {
+    public long getId() {
         return this.id;
     }
 
@@ -40,7 +41,7 @@ public class User implements Serializable {
      * setter
      * @param id unique user account id
      */
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -76,6 +77,16 @@ public class User implements Serializable {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 
 
