@@ -17,12 +17,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
- *   Posts REST controller which itself is a client to a subset of the following
- *   endpoint: https://jsonplaceholder.typicode.com
- *
- *   Please refer to the following swagger api for more detail on the available
- *   operations and corresponding response status
- *   https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
+ * Posts REST controller which itself is a client to a subset of the following
+ * endpoint: https://jsonplaceholder.typicode.com
+ * <p>
+ * Please refer to the following swagger api for more detail on the available
+ * operations and corresponding response status
+ * https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
  */
 @RestController
 public class TypicodeController {
@@ -45,7 +45,7 @@ public class TypicodeController {
         ResponseEntity<List<Post>> posts = null;
 
         try {
-            posts =  future.get();
+            posts = future.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -69,13 +69,13 @@ public class TypicodeController {
         ResponseEntity<List<Post>> posts = null;
 
         try {
-            posts =  future.get();
+            posts = future.get();
         } catch (InterruptedException e) {
-            String message = "encountered an error while retrieving the list of post for  userId="+userId;
+            String message = "encountered an error while retrieving the list of posts for userId=" + userId;
             logger.error(e.getStackTrace());
             throw new ServiceException(message);
         } catch (ExecutionException e) {
-            String message = "encountered an error while retrieving the list of post for  userId="+userId;
+            String message = "encountered an error while retrieving the list of posts for userId=" + userId;
             logger.error(e.getStackTrace());
             throw new ServiceException(message);
         }
@@ -87,13 +87,14 @@ public class TypicodeController {
 
 
     /**
-     /**
+     * /**
+     *
      * @param id id of the post to fetch
      * @return post result
      * @throws ServiceException if an upstream exception is encountered
      */
     @GetMapping("/posts/{id}")
-    public Post findPostById(@PathVariable("id") String id)  throws ServiceException {
+    public Post findPostById(@PathVariable("id") String id) throws ServiceException {
 
         CompletableFuture<Post> future = service.findPostById(id);
 
@@ -104,11 +105,11 @@ public class TypicodeController {
             post = future.get();
 
         } catch (InterruptedException e) {
-            String message = "encountered an error while retrieving list for post id ="+id;
+            String message = "encountered an error while retrieving list for post id =" + id;
             logger.error(e.getStackTrace());
             throw new ServiceException(message);
         } catch (ExecutionException e) {
-            String message = "encountered an error while retrieving the list for post id ="+id;
+            String message = "encountered an error while retrieving the list for post id =" + id;
             logger.error(e.getStackTrace());
             throw new ServiceException(message);
         }

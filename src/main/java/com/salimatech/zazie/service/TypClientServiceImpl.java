@@ -15,8 +15,8 @@ import java.util.concurrent.CompletableFuture;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
- *  REST client service for the follwing endpoint
- *  https://jsonplaceholder.typicode.com/post
+ * REST client service for the follwing endpoint
+ * https://jsonplaceholder.typicode.com/post
  */
 
 @Service
@@ -44,7 +44,7 @@ public class TypClientServiceImpl implements TypClientService {
     @Async
     @Override
     public CompletableFuture<ResponseEntity<List<Post>>> fetchPostsByUserId(long userId) {
-        String url = String.format(postsUrl+"?userId=%s", userId);
+        String url = String.format(postsUrl + "?userId=%s", userId);
 
         ResponseEntity<List<Post>> response = restTemplate.exchange(url, HttpMethod.GET,
                 null, new ParameterizedTypeReference<List<Post>>() {
@@ -57,11 +57,11 @@ public class TypClientServiceImpl implements TypClientService {
     @Override
     public CompletableFuture<Post> findPostById(String id) {
 
-     String url = String.format(postsUrl+"/%s", id);
+        String url = String.format(postsUrl + "/%s", id);
 
-     Post response = restTemplate.getForObject(url, Post.class);
+        Post response = restTemplate.getForObject(url, Post.class);
 
-     return completedFuture(response);
+        return completedFuture(response);
 
     }
 

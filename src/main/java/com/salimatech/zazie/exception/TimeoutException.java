@@ -5,13 +5,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * The service timed out
- *
  */
 @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
 public class TimeoutException extends RuntimeException {
 
     public TimeoutException(String message) {
 
-        super(message );
+        super(message);
     }
 }

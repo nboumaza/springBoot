@@ -14,10 +14,15 @@ spring based implementation.
 ## Build Tool
 This project uses maven as the build and packaging tool
 
-### Building the artifact and java doc generation
+### Building 
 ```sh
 mvn install javadoc:javadoc 
 ```
+### Java Doc
+
+after completing the above command the generated java doc will be under
+<<projectRoot>/target/site/apidocs/
+
 
 ## Running
 To start the server simply type from the root directory

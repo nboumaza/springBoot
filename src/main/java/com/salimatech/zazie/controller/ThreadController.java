@@ -21,18 +21,19 @@ public class ThreadController {
      * retrieve threads status
      */
     @GetMapping("/threads/status")
-    public  void retrieveDeadLockStatus() {
+    public void retrieveDeadLockStatus() {
 
-      //TODO
+        //TODO
     }
 
 
     /**
      * setup up deadlock between thow threads
+     *
      * @throws TimeoutException timeout exception
      */
     @PostMapping("/threads/deadlock")
-    public  void createdDeadLock() throws TimeoutException{
+    public void createdDeadLock() throws TimeoutException {
 
         try {
             service.createDeadlock();
@@ -42,7 +43,6 @@ public class ThreadController {
 
 
     }
-
 
 
 }

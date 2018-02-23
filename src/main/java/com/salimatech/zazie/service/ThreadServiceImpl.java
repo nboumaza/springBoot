@@ -47,24 +47,24 @@ public class ThreadServiceImpl {
      */
     private Runnable getRunnable(Object resource1, Object resource2) {
 
-       return (Runnable) () -> {
-           logger.info(Thread.currentThread().getName()+" waiting for "+resource1);
-           synchronized (resource1) {
-               logger.info(Thread.currentThread().getName()+" acquired "+resource1);
-               try {
-                   // simulate some processing
-                   TimeUnit.MILLISECONDS.sleep(50);
-               } catch (InterruptedException e) {
-                   logger.error(e.getStackTrace());
-               }
-               logger.info(Thread.currentThread().getName()+" waiting on "+resource2);
-               synchronized (resource2) {
-                   logger.info(Thread.currentThread().getName()+" acquired "+resource2);
-               }
+        return (Runnable) () -> {
+            logger.info(Thread.currentThread().getName() + " waiting for " + resource1);
+            synchronized (resource1) {
+                logger.info(Thread.currentThread().getName() + " acquired " + resource1);
+                try {
+                    // simulate some processing
+                    TimeUnit.MILLISECONDS.sleep(50);
+                } catch (InterruptedException e) {
+                    logger.error(e.getStackTrace());
+                }
+                logger.info(Thread.currentThread().getName() + " waiting on " + resource2);
+                synchronized (resource2) {
+                    logger.info(Thread.currentThread().getName() + " acquired " + resource2);
+                }
 
-           }
-       };
-       }
+            }
+        };
+    }
 
 
 }

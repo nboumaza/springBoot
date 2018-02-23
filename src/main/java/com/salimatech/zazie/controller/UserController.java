@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *   User Account REST controller
- *   Please refer to the following swagger api for more detail on the available
- *   operations and corresponding response status
- *   https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
+ * User Account REST controller
+ * Please refer to the following swagger api for more detail on the available
+ * operations and corresponding response status
+ * https://app.swaggerhub.com/apis/nboumaza/springboot/1.0.0#/
  */
 @RestController
 public class UserController {
@@ -45,12 +45,12 @@ public class UserController {
      * @throws EntityNotFoundException if no such account exists
      */
     @GetMapping("/users/{userId}")
-    public User findByUserId(@PathVariable("userId") String userId)  throws EntityNotFoundException {
+    public User findByUserId(@PathVariable("userId") String userId) throws EntityNotFoundException {
 
-       Optional<User> user = userRepository.findByUserId(userId);
+        Optional<User> user = userRepository.findByUserId(userId);
 
         if (!user.isPresent()) {
-            String message = "could not find a user account with userId = "+userId;
+            String message = "could not find a user account with userId = " + userId;
             logger.debug(message);
             throw new EntityNotFoundException(message);
         }
@@ -64,7 +64,7 @@ public class UserController {
         userRepository.deleteByUserId(userId);
 
         //audit and authorization @Advice could be used here
-        logger.debug("deleted user with userId ="+userId);
+        logger.debug("deleted user with userId =" + userId);
 
         return ResponseEntity.noContent().build();
 
@@ -77,8 +77,7 @@ public class UserController {
 
         try {
             savedUser = userRepository.save(user);
-        }
-        catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
 
             logger.error(e.getStackTrace());
             throw new DataIntegrityException(e.getMessage());

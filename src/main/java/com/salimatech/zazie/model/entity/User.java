@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 /**
- *  User entity
+ * User entity
  */
 @Entity
 @Table(name = "users")
@@ -29,6 +29,7 @@ public class User implements Serializable {
 
     /**
      * getter
+     *
      * @return id of the user account
      */
     @Id
@@ -39,6 +40,7 @@ public class User implements Serializable {
 
     /**
      * setter
+     *
      * @param id unique user account id
      */
     public void setId(long id) {
@@ -46,7 +48,8 @@ public class User implements Serializable {
     }
 
     /**
-     *  getter
+     * getter
+     *
      * @return user account userId
      */
     @Column(unique = true, updatable = false)
@@ -56,6 +59,7 @@ public class User implements Serializable {
 
     /**
      * setter
+     *
      * @param userId user account userId
      */
     public void setUserId(String userId) {
@@ -64,6 +68,7 @@ public class User implements Serializable {
 
     /**
      * setter
+     *
      * @return email associated with the account
      */
     @Column(unique = true, updatable = false)
@@ -73,6 +78,7 @@ public class User implements Serializable {
 
     /**
      * setter
+     *
      * @param email unique email address to set
      */
     public void setEmail(String email) {

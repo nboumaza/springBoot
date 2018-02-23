@@ -10,12 +10,14 @@ public interface TypClientService {
 
     /**
      * fetch all user posts
+     *
      * @return list of all  posts
      */
     CompletableFuture<ResponseEntity<List<Post>>> fetchAllPosts();
 
     /**
      * find post by id
+     *
      * @param id id of the post to fetch
      * @return found post - null otherwise
      */
@@ -24,7 +26,8 @@ public interface TypClientService {
 
     /**
      * fetch a user posts
-     * @param userId  userId to fetch posts for
+     *
+     * @param userId userId to fetch posts for
      * @return list of all posts associated with a given userId
      */
     CompletableFuture<ResponseEntity<List<Post>>> fetchPostsByUserId(long userId);
