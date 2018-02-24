@@ -1,15 +1,18 @@
 package com.salimatech.zazie.service;
 
+import com.salimatech.zazie.model.json.DeadlockMonitor;
+import com.salimatech.zazie.model.json.ThreadEvent;
+import com.salimatech.zazie.model.json.ThreadStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static java.lang.management.ManagementFactory.getThreadMXBean;
 
@@ -20,31 +23,54 @@ import static java.lang.management.ManagementFactory.getThreadMXBean;
  */
 
 @Service
-public class ThreadServiceImpl {
+public class ThreadServiceImpl implements ThreadService {
 
     private static Logger logger = LogManager.getLogger(ThreadServiceImpl.class);
 
+
     /**
-     * @throws TimeoutException
+     *  Creates 2 separate threads that share the same resources: lock1 and lock2
+     *  The order of accessing the resources is such that it will likely create a deadlock scenario
+     *  between the 2 thread.
+     *
+     * @return list of events that resulted in a deadlock scenario
      */
+    @Override
     public void createDeadlock() {
 
 
         Object lock1 = "lock1";
         Object lock2 = "lock2";
 
+
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
+
                 synchronized (lock1) {
-                    logger.info(Thread.currentThread().getName() + " acquired lock1");
+
+                    ThreadEvent te1 = new ThreadEvent(Instant.now(),
+                            Thread.currentThread().getName(), "acquired lock1");
+                    logger.info(te1.toString());
+
+
+                    //simulate processing
                     try {
                         TimeUnit.MILLISECONDS.sleep(50);
                     } catch (InterruptedException ignore) {
                     }
-                    logger.info(Thread.currentThread().getName() + " waiting on lock2");
+                    //completed processing
+                    ThreadEvent te2 = new ThreadEvent(Instant.now(),
+                            Thread.currentThread().getName(), "waiting on lock2");
+
+                    logger.info(te2.toString());
+
                     synchronized (lock2) {
-                        logger.info(Thread.currentThread().getName() + " acquired lock2");
+                        ThreadEvent te3 = new ThreadEvent(Instant.now(),
+                                Thread.currentThread().getName(), "acquired lock2");
+
+                        logger.info(te3.toString());
+
                     }
                 }
             }
@@ -55,14 +81,29 @@ public class ThreadServiceImpl {
             @Override
             public void run() {
                 synchronized (lock2) {
-                    logger.info(Thread.currentThread().getName() + " acquired lock2");
+
+                    ThreadEvent te1 = new ThreadEvent(Instant.now(),
+                            Thread.currentThread().getName(), "acquired lock2");
+                    logger.info(te1.toString());
+
+
+                    //simulate processing
                     try {
                         TimeUnit.MILLISECONDS.sleep(50);
                     } catch (InterruptedException ignore) {
                     }
-                    logger.info(Thread.currentThread().getName() + " waiting on lock1");
+                    //completed processing
+                    ThreadEvent te2 = new ThreadEvent(Instant.now(),
+                            Thread.currentThread().getName(), "waiting on lock1");
+
+                    logger.info(te2.toString());
+
+
                     synchronized (lock1) {
-                        logger.info(Thread.currentThread().getName() + " acquired lock1");
+                        ThreadEvent te3 = new ThreadEvent(Instant.now(),
+                                Thread.currentThread().getName(), "acquired lock1");
+
+                        logger.info(te3.toString());
                     }
                 }
             }
@@ -76,12 +117,21 @@ public class ThreadServiceImpl {
     }
 
     /**
-     * detect deadlock and log info
+     * Detect if a deadlock scenario and advise
+     * If a deadlock scenario is found then the list of thread stated will be
+     * included in the returned monitor
+     * @return deadlock findings
      */
-    public void findDeadlock() {
+    @Override
+    public DeadlockMonitor findDeadlock() {
+
+        List<ThreadStatus> threadStates = new ArrayList<>();
+        DeadlockMonitor deadLockMonitor = new DeadlockMonitor(threadStates);
 
         ThreadMonitor monitor = new ThreadMonitor();
-        monitor.findDeadlock();
+        monitor.findDeadlock(deadLockMonitor);
+
+        return deadLockMonitor;
 
     }
 
@@ -89,88 +139,87 @@ public class ThreadServiceImpl {
     /**
      * ThreadMonitor object to get thread information in the local VM
      */
-    static class ThreadMonitor {
-        private static String INDENT = "    ";
-        private MBeanServerConnection server;
+    class ThreadMonitor {
+
         private ThreadMXBean tmbean;
-        private ObjectName objname;
-        private String findDeadlocksMethodName = "findDeadlockedThreads";
-        private boolean canDumpLocks = true;
 
         public ThreadMonitor() {
             this.tmbean = getThreadMXBean();
         }
 
-
         /**
-         * dump thread info
+         * adds a blocked thread's state info
          */
-        private void dumpThreadInfo() {
-            long[] tids = tmbean.getAllThreadIds();
-            ThreadInfo[] tinfos = tmbean.getThreadInfo(tids, Integer.MAX_VALUE);
-            for (ThreadInfo ti : tinfos) {
-                logThreadInfo(ti);
-            }
-        }
+        private ThreadStatus getThreadStatus(ThreadInfo ti) {
+            ThreadStatus ts = new ThreadStatus();
 
-        /**
-         * log thread state info
-         */
-        private void logThreadInfo(ThreadInfo ti) {
-            StringBuilder sb = new StringBuilder("\"" + ti.getThreadName() + "\"" + " Id="
-                    + ti.getThreadId() + " in " + ti.getThreadState());
+            ts.setThreadName(ti.getThreadName());
+            ts.setThreadState(ti.getThreadState().name());
+
             if (ti.getLockName() != null) {
-                sb.append(" on lock=" + ti.getLockName());
+
+                ts.setLockName(String.valueOf(ti.getLockInfo().getIdentityHashCode()));
             }
             if (ti.isSuspended()) {
-                sb.append(" (suspended)");
+                ts.setSuspended(true);
             }
             if (ti.isInNative()) {
-                sb.append(" (running in native)");
+                ts.setNative(true);
+
             }
-            logger.info(sb.toString());
+
             if (ti.getLockOwnerName() != null) {
-                logger.info(INDENT + " owned by " + ti.getLockOwnerName() + " Id="
-                        + ti.getLockOwnerId());
+
+                ts.setLockOwnerName(ti.getLockOwnerName());
+                ts.setLockName(ti.getLockOwnerName());
             }
+            return ts;
+
         }
 
 
         /**
-         * Checks if any threads are deadlocked. If any, print the thread dump
+         * Checks if any threads are deadlocked. If any, collect the thread dump
          * information.
          */
-        private boolean findDeadlock() {
+        private void findDeadlock( DeadlockMonitor deadLockMonitor) {
             long[] tids;
-            if (findDeadlocksMethodName.equals("findDeadlockedThreads")
-                    && tmbean.isSynchronizerUsageSupported()) {
+            if (tmbean.isSynchronizerUsageSupported()) {
                 tids = tmbean.findDeadlockedThreads();
+
                 if (tids == null) {
-                    return false;
+                    return;
                 }
-
-                logger.info("Deadlock found :-");
+                deadLockMonitor.setDeadlockFound(Boolean.TRUE);
+                logger.info(">>>> Deadlock found !");
                 ThreadInfo[] infos = tmbean.getThreadInfo(tids, true, true);
-                for (ThreadInfo ti : infos) {
-                    logThreadInfo(ti);
+                collectThreadStatus(deadLockMonitor, infos);
 
 
-                }
             } else {
                 tids = tmbean.findMonitorDeadlockedThreads();
                 if (tids == null) {
-                    return false;
+                    return;
                 }
+                deadLockMonitor.setDeadlockFound(Boolean.TRUE);
                 ThreadInfo[] infos = tmbean.getThreadInfo(tids, Integer.MAX_VALUE);
-                for (ThreadInfo ti : infos) {
-                    // print thread information
-                    logThreadInfo(ti);
-                }
+                collectThreadStatus(deadLockMonitor, infos);
+
+
             }
 
-            return true;
         }
 
+        /**
+         *  collect thread info
+         */
+        private void collectThreadStatus(DeadlockMonitor deadLockMonitor, ThreadInfo[] infos){
+
+            for (ThreadInfo ti : infos) {
+                //TODO make below add thread safe
+                deadLockMonitor.getDeadlockInfo().add(getThreadStatus(ti));
+            }
+        }
 
     }
 
