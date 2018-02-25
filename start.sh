@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-mvn clean install && docker-compose up --build
+mvn clean install javadoc:javadoc && docker-compose up --build

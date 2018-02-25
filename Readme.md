@@ -37,6 +37,8 @@ a docker container which exposes port 9090
 ```sh
 ./start.sh
 ```
+Note: will start a clean build and regenerate the java docs 
+ 
 
 ## Testing 
 
