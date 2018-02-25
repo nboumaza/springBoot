@@ -62,7 +62,6 @@ public class UserRepositoryTest {
         // then
         assertTrue(!found.isPresent());
 
-
     }
 
 
