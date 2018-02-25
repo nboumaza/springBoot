@@ -31,6 +31,13 @@ spring boot application uses http://localhost:9090
 mvn spring-boot:run
 ```
 
+Alternatively if you have [Docker](https://www.docker.com/) installed you can start the application in 
+a docker container which exposes port 9090
+
+```sh
+./start.sh
+```
+
 ## Testing 
 
 ### Postman
