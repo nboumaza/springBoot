@@ -33,7 +33,6 @@ public class ThreadServiceImpl implements ThreadService {
      *  The order of accessing the resources is such that it will likely create a deadlock scenario
      *  between the 2 thread.
      *
-     * @return list of events that resulted in a deadlock scenario
      */
     @Override
     public void createDeadlock() {
