@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { AppConfig.class })
+@ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 @AutoConfigureMockMvc
 public class FibonacciControllerTest {
@@ -33,7 +33,6 @@ public class FibonacciControllerTest {
     }
 
 
-
     @Test
     public void fibonacciRecursiveValidRequest() throws Exception {
         this.mvc.perform(get("/fibonacci/?number=2").accept(MediaType.APPLICATION_JSON))
@@ -42,10 +41,11 @@ public class FibonacciControllerTest {
 
 
     }
+
     @Test
     public void fibonacciRecursiveMissingParam() throws Exception {
         this.mvc.perform(get("/fibonacci").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest() );
+                .andExpect(status().isBadRequest());
 
 
     }

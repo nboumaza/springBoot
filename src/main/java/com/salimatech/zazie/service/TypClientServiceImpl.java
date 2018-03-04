@@ -22,12 +22,16 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @Service
 public class TypClientServiceImpl implements TypClientService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
 
     //TODO get from config
     private String postsUrl = "https://jsonplaceholder.typicode.com/posts";
+
+    @Autowired
+    public TypClientServiceImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
 
     @Async
@@ -38,7 +42,7 @@ public class TypClientServiceImpl implements TypClientService {
                 null, new ParameterizedTypeReference<List<Post>>() {
                 });
 
-        return CompletableFuture.<ResponseEntity<List<Post>>>completedFuture(response);
+        return CompletableFuture.completedFuture(response);
     }
 
     @Async
@@ -50,12 +54,12 @@ public class TypClientServiceImpl implements TypClientService {
                 null, new ParameterizedTypeReference<List<Post>>() {
                 });
 
-        return CompletableFuture.<ResponseEntity<List<Post>>>completedFuture(response);
+        return CompletableFuture.completedFuture(response);
     }
 
     @Async
     @Override
-    public CompletableFuture<Post> findPostById(String id) {
+    public CompletableFuture<Post> findPostById(long id) {
 
         String url = String.format(postsUrl + "/%s", id);
 

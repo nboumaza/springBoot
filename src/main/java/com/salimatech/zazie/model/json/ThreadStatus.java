@@ -14,7 +14,6 @@ public class ThreadStatus {
     private String lockOwnerName;
 
 
-
     public String getThreadName() {
         return threadName;
     }
@@ -26,6 +25,11 @@ public class ThreadStatus {
     public boolean isSuspended() {
         return isSuspended;
     }
+
+    public void setSuspended(boolean suspended) {
+        isSuspended = suspended;
+    }
+
     public boolean isNative() {
         return isNative;
     }
@@ -34,9 +38,6 @@ public class ThreadStatus {
         isNative = aNative;
     }
 
-    public void setSuspended(boolean suspended) {
-        isSuspended = suspended;
-    }
     public String getThreadState() {
         return threadState;
     }
@@ -60,7 +61,6 @@ public class ThreadStatus {
     public void setLockOwnerName(String lockOwnerName) {
         this.lockOwnerName = lockOwnerName;
     }
-
 
 
     @Override

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { AppConfig.class })
+@ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 @AutoConfigureMockMvc
 public class HomeControllerTest {
@@ -33,11 +33,19 @@ public class HomeControllerTest {
 
 
     @Test
-    public void home() throws Exception {
+    public void goodHome() throws Exception {
 
         this.mvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("Greetings from Spring Boot!")));
+
+    }
+
+    @Test
+    public void bogusHome() throws Exception {
+
+        this.mvc.perform(get("/bogusHome").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
     }
 }

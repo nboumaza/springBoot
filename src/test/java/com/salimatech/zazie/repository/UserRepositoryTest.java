@@ -1,28 +1,46 @@
 package com.salimatech.zazie.repository;
 
 import com.salimatech.zazie.model.entity.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserRepositoryTest {
 
-    User someUser = null;
+    private User someUser;
 
 
     @Autowired
     private UserRepository userRepository;
 
+
+    @Before
+    public void setUp() {
+        someUser = null;
+    }
+
+    @Test
+    public void findAllUsers() {
+
+
+        // when
+        List<User> users = userRepository.findAll();
+
+        // then
+        assertFalse(users.isEmpty());
+        assertTrue(users.size() == 4);
+
+    }
 
 
     @Test
@@ -40,7 +58,6 @@ public class UserRepositoryTest {
         assertEquals(retrieved.getUserId(), someUser.getUserId());
         assertEquals(retrieved.getEmail(), someUser.getEmail());
 
-
     }
 
 
@@ -55,11 +72,7 @@ public class UserRepositoryTest {
         long deletedId = userRepository.deleteByUserId(someUser.getUserId());
 
         // then
-        assertNotNull(deletedId);
-
         Optional<User> found = userRepository.findByUserId(someUser.getUserId());
-
-        // then
         assertTrue(!found.isPresent());
 
     }

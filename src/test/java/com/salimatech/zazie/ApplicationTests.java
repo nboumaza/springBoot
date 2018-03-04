@@ -18,16 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationTests {
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter;
-
     @Autowired
     Executor asyncExecutor;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     public void contextLoads() {

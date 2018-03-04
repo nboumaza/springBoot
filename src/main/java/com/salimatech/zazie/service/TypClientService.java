@@ -21,7 +21,7 @@ public interface TypClientService {
      * @param id id of the post to fetch
      * @return found post - null otherwise
      */
-    CompletableFuture<Post> findPostById(String id);
+    CompletableFuture<Post> findPostById(long id);
 
 
     /**

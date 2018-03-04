@@ -16,14 +16,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { AppConfig.class })
+@ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 @AutoConfigureMockMvc
 public class ThreadControllerTest {
 
     @Autowired
     private MockMvc mvc;
-
 
     @Test
     public void retrieveDeadLockStatus() throws Exception {
@@ -49,19 +48,17 @@ public class ThreadControllerTest {
                 "  ]\n" +
                 "    }";
 
-        createdDeadLock();
+        this.createdDeadLock();
         this.mvc.perform(post("/threads/deadlock").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        //TODO add expectation
     }
 
 
-
-
-
-    public void createdDeadLock() throws Exception {
+    private void createdDeadLock() throws Exception {
         this.mvc.perform(get("/threads/status").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        //TODO add expectation
     }
 }

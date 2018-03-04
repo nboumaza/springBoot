@@ -11,6 +11,7 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -29,10 +30,9 @@ public class ThreadServiceImpl implements ThreadService {
 
 
     /**
-     *  Creates 2 separate threads that share the same resources: lock1 and lock2
-     *  The order of accessing the resources is such that it will likely create a deadlock scenario
-     *  between the 2 thread.
-     *
+     * Creates 2 separate threads that share the same resources: lock1 and lock2
+     * The order of accessing the resources is such that it will likely create a deadlock scenario
+     * between the 2 thread.
      */
     @Override
     public void createDeadlock() {
@@ -42,71 +42,63 @@ public class ThreadServiceImpl implements ThreadService {
         Object lock2 = "lock2";
 
 
-        Thread thread1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        Thread thread1 = new Thread(() -> {
 
-                synchronized (lock1) {
+            synchronized (lock1) {
 
-                    ThreadEvent te1 = new ThreadEvent(Instant.now(),
-                            Thread.currentThread().getName(), "acquired lock1");
-                    logger.info(te1.toString());
+                ThreadEvent te1 = new ThreadEvent(Instant.now(),
+                        Thread.currentThread().getName(), "acquired lock1");
+                logger.info(te1.toString());
 
 
-                    //simulate processing
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(50);
-                    } catch (InterruptedException ignore) {
-                    }
-                    //completed processing
-                    ThreadEvent te2 = new ThreadEvent(Instant.now(),
-                            Thread.currentThread().getName(), "waiting on lock2");
+                //simulate processing
+                try {
+                    TimeUnit.MILLISECONDS.sleep(50);
+                } catch (InterruptedException ignore) {
+                }
+                //completed processing
+                ThreadEvent te2 = new ThreadEvent(Instant.now(),
+                        Thread.currentThread().getName(), "waiting on lock2");
 
-                    logger.info(te2.toString());
+                logger.info(te2.toString());
 
-                    synchronized (lock2) {
-                        ThreadEvent te3 = new ThreadEvent(Instant.now(),
-                                Thread.currentThread().getName(), "acquired lock2");
+                synchronized (lock2) {
+                    ThreadEvent te3 = new ThreadEvent(Instant.now(),
+                            Thread.currentThread().getName(), "acquired lock2");
 
-                        logger.info(te3.toString());
+                    logger.info(te3.toString());
 
-                    }
                 }
             }
-
         });
 
-        Thread thread2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (lock2) {
+        Thread thread2 = new Thread(() -> {
+            synchronized (lock2) {
 
-                    ThreadEvent te1 = new ThreadEvent(Instant.now(),
-                            Thread.currentThread().getName(), "acquired lock2");
-                    logger.info(te1.toString());
+                ThreadEvent te1 = new ThreadEvent(Instant.now(),
+                        Thread.currentThread().getName(), "acquired lock2");
+                logger.info(te1.toString());
 
 
-                    //simulate processing
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(50);
-                    } catch (InterruptedException ignore) {
-                    }
-                    //completed processing
-                    ThreadEvent te2 = new ThreadEvent(Instant.now(),
-                            Thread.currentThread().getName(), "waiting on lock1");
+                //simulate processing
+                try {
+                    TimeUnit.MILLISECONDS.sleep(50);
+                } catch (InterruptedException ignore) {
+                }
+                //completed processing
+                ThreadEvent te2 = new ThreadEvent(Instant.now(),
+                        Thread.currentThread().getName(), "waiting on lock1");
 
-                    logger.info(te2.toString());
+                logger.info(te2.toString());
 
 
-                    synchronized (lock1) {
-                        ThreadEvent te3 = new ThreadEvent(Instant.now(),
-                                Thread.currentThread().getName(), "acquired lock1");
+                synchronized (lock1) {
+                    ThreadEvent te3 = new ThreadEvent(Instant.now(),
+                            Thread.currentThread().getName(), "acquired lock1");
 
-                        logger.info(te3.toString());
-                    }
+                    logger.info(te3.toString());
                 }
             }
-
         });
 
 
@@ -119,12 +111,13 @@ public class ThreadServiceImpl implements ThreadService {
      * Detect if a deadlock scenario and advise
      * If a deadlock scenario is found then the list of thread stated will be
      * included in the returned monitor
+     *
      * @return deadlock findings
      */
     @Override
     public DeadlockMonitor findDeadlock() {
 
-        List<ThreadStatus> threadStates = new ArrayList<>();
+        List<ThreadStatus> threadStates = Collections.synchronizedList(new ArrayList<>());
         DeadlockMonitor deadLockMonitor = new DeadlockMonitor(threadStates);
 
         ThreadMonitor monitor = new ThreadMonitor();
@@ -138,11 +131,11 @@ public class ThreadServiceImpl implements ThreadService {
     /**
      * ThreadMonitor object to get thread information in the local VM
      */
-    class ThreadMonitor {
+    private class ThreadMonitor {
 
         private ThreadMXBean tmbean;
 
-        public ThreadMonitor() {
+        private ThreadMonitor() {
             this.tmbean = getThreadMXBean();
         }
 
@@ -181,7 +174,7 @@ public class ThreadServiceImpl implements ThreadService {
          * Checks if any threads are deadlocked. If any, collect the thread dump
          * information.
          */
-        private void findDeadlock( DeadlockMonitor deadLockMonitor) {
+        private void findDeadlock(DeadlockMonitor deadLockMonitor) {
             long[] tids;
             if (tmbean.isSynchronizerUsageSupported()) {
                 tids = tmbean.findDeadlockedThreads();
@@ -189,7 +182,7 @@ public class ThreadServiceImpl implements ThreadService {
                 if (tids == null) {
                     return;
                 }
-                deadLockMonitor.setDeadlockFound(Boolean.TRUE);
+                deadLockMonitor.setDeadlockFound(true);
                 logger.info(">>>> Deadlock found !");
                 ThreadInfo[] infos = tmbean.getThreadInfo(tids, true, true);
                 collectThreadStatus(deadLockMonitor, infos);
@@ -200,7 +193,7 @@ public class ThreadServiceImpl implements ThreadService {
                 if (tids == null) {
                     return;
                 }
-                deadLockMonitor.setDeadlockFound(Boolean.TRUE);
+                deadLockMonitor.setDeadlockFound(true);
                 ThreadInfo[] infos = tmbean.getThreadInfo(tids, Integer.MAX_VALUE);
                 collectThreadStatus(deadLockMonitor, infos);
 
@@ -210,9 +203,9 @@ public class ThreadServiceImpl implements ThreadService {
         }
 
         /**
-         *  collect thread info
+         * collect thread info
          */
-        private void collectThreadStatus(DeadlockMonitor deadLockMonitor, ThreadInfo[] infos){
+        private void collectThreadStatus(DeadlockMonitor deadLockMonitor, ThreadInfo[] infos) {
 
             for (ThreadInfo ti : infos) {
                 //TODO make below add thread safe

@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { AppConfig.class })
+@ContextConfiguration(classes = {AppConfig.class})
 @WebAppConfiguration
 @AutoConfigureMockMvc
 public class WordCountControllerTest {
@@ -40,14 +40,13 @@ public class WordCountControllerTest {
     @Test
     public void countWords() throws Exception {
 
-        ResultActions result  = this.mvc.perform(post("/countWords")
+        ResultActions result = this.mvc.perform(post("/countWords")
                 .contentType(MediaType.TEXT_PLAIN)
                 .content(om.writeValueAsString("ccc!; aaa, ddd; aaa, ddd, aaa")));
 
         result.andExpect(status().isOk());
         result.andExpect(content().string("{\"aaa\":3,\"ccc\":1,\"ddd\":2}"));
-
-
-
     }
+
+
 }
